@@ -35,6 +35,7 @@ export default class VanillaTilt {
     this.settings = this.extendSettings(settings);
 
     this.reverse = this.settings.reverse ? -1 : 1;
+    this.resetToStart = VanillaTilt.isSettingTrue(this.settings["reset-to-start"]);
     this.glare = VanillaTilt.isSettingTrue(this.settings.glare);
     this.glarePrerender = VanillaTilt.isSettingTrue(this.settings["glare-prerender"]);
     this.fullPageListening = VanillaTilt.isSettingTrue(this.settings["full-page-listening"]);
@@ -220,6 +221,10 @@ export default class VanillaTilt {
         `rotateX(0deg) ` +
         `rotateY(0deg) ` +
         `scale3d(1, 1, 1)`;
+    }
+
+    if(this.resetToStart == true){
+      this.updateInitialPosition();
     }
 
     this.resetGlare();
@@ -423,6 +428,7 @@ export default class VanillaTilt {
    * @param {boolean} settings.full-page-listening - If true, parallax effect will listen to mouse move events on the whole document, not only the selected element
    * @param {string|object} settings.mouse-event-element - String selector or link to HTML-element what will be listen mouse events
    * @param {boolean} settings.reset - false = If the tilt effect has to be reset on exit
+   * @param {boolean} settings.reset-to-start - true = On reset event (mouse leave) will return to initial start angle (startX, startY)
    * @param {gyroscope} settings.gyroscope - Enable tilting by deviceorientation events
    * @param {gyroscopeSensitivity} settings.gyroscopeSensitivity - Between 0 and 1 - The angle at which max tilt position is reached. 1 = 90deg, 0.5 = 45deg, etc..
    * @param {gyroscopeSamples} settings.gyroscopeSamples - How many gyroscope moves to decide the starting position.
@@ -445,6 +451,7 @@ export default class VanillaTilt {
       "full-page-listening": false,
       "mouse-event-element": null,
       reset: true,
+      "reset-to-start": false,
       gyroscope: true,
       gyroscopeMinAngleX: -45,
       gyroscopeMaxAngleX: 45,
